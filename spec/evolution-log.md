@@ -67,3 +67,34 @@ _Append-only. Never delete entries. Maintained by the evolution agent._
 - Archive: spec/proposals/2026-10-31-b-approved.md (copy of draft.md; draft.md kept as the working copy)
 - Lifecycle state: Proposal (unchanged; advances only when /create-specs runs)
 - Summary: The refreshed draft was adopted into spec/current-state.md. R8 is revised: the yen widget stays visible while the travellers are in Japan. Soul implications and roadmap items were already appended by the first approval and were not repeated. spec/proposal.md, spec/docs/ and implementation/ were not changed. Open: whether the yen widget shows after the trip ends.
+
+## 2026-10-31 — Conversation save 005: itinerary, homepage layout, browser calls to free data sources (CONTRADICTS)
+
+- Event: conversation_save
+- Classification: CONTRADICTS
+- Source: spec/docs/normalized/2026-10-31-conversation-save-005.md
+- Run log: spec/log/2026-10-31-007-evolution.md
+- Contradictions: spec/contradictions.md (resolved by user decision)
+- Summary: The user allowed browser requests to free data sources that expose only generic request data such as IP (yen rate via Frankfurter, Fuji visibility via Open-Meteo), replacing the build-time-only approach. Itinerary supplied (Tokyo 5–10 Nov, Osaka 11–16, Okinawa 17–26, Tokyo 27–29, Italy 30 Nov). Homepage reworked: preflight removed from landing day, yen widget headline rate with JPY → EUR table only, clock and yen in one row, checklists merged under a Preflight | Flight switch after that row (revises R5, R6). Fuji tool requested now.
+
+## 2026-10-31 — Proposal approved (third approval)
+
+- Event: proposal approved
+- Archive: spec/proposals/2026-10-31-c-approved.md (copy of draft.md; draft.md kept as the working copy)
+- Lifecycle state: Implementation (Refinement) (unchanged by approval)
+- Summary: The draft built from conversation save 005 was adopted into spec/current-state.md. R4 now holds the supplied itinerary; R5, R6, R7 and R8 describe the reworked homepage (clock and yen in one row, merged checklist section with a Preflight | Flight switch, preflight absent from landing day, yen headline rate with JPY → EUR table only, visible after the trip); R13 hands the Fuji tool to new R26 (one component on the homepage and the Tools page); R17 is extended to allow browser requests to free data sources that expose only generic data such as IP, and the technical constraint now allow-lists api.frankfurter.dev and api.open-meteo.com. One soul principle was appended; three backlog items were added to spec/roadmap.md. spec/proposal.md, spec/docs/ and implementation/ were not changed.
+
+## 2026-10-31 — Conversation save 006: open questions answered, more Fuji viewpoints (CONFIRMS)
+
+- Event: conversation_save
+- Classification: CONFIRMS
+- Source: spec/docs/normalized/2026-10-31-conversation-save-006.md
+- Run log: spec/log/2026-10-31-008-evolution.md
+- Summary: Records the user's answers that were folded into approval c (yen visible after the trip; one Fuji component on homepage and Tools; itinerary dates fixed in the file). Deepens R26 with four more Fuji viewpoints — Mount Takao summit, Mount Mitake (御岳山), Kamakura beaches & Enoshima, Shizuoka (Nihondaira, Miho) — for seven in total, already implemented. Blueprint fuji.md lags and needs regenerating. Confirms streak: 1.
+
+## 2026-10-31 — Proposal approved (fourth approval)
+
+- Event: proposal approved
+- Archive: spec/proposals/2026-10-31-d-approved.md (copy of draft.md; draft.md kept as the working copy)
+- Lifecycle state: Implementation (Refinement) (unchanged by approval)
+- Summary: The draft built from conversation save 006 was adopted into spec/current-state.md. R26 now names the seven Fuji viewpoints — Tokyo, Mount Takao (summit), Mount Mitake, Kamakura beaches & Enoshima (one row), Hakone, Lake Kawaguchiko and Shizuoka (Nihondaira, Miho) — still fetched in a single request, and its acceptance criterion covers each viewpoint. No soul implication and no new roadmap items, so soul.md and roadmap.md were not changed. spec/proposal.md, spec/docs/ and implementation/ were not changed.

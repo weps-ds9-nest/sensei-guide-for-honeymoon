@@ -6,7 +6,7 @@ _Purpose: define the system topology, the build-time and run-time boundaries, an
 
 - The product is a **static single-page site**. The build produces files in `dist/`; those files are served by Vercel.
 - There is **no server code**: no API routes, no serverless functions, no database, no CMS.
-- The **browser** is the only runtime. It reads the built files and the travellers' own local state.
+- The **browser** is the only runtime. It reads the built files, the travellers' own local state, and two allow-listed free data APIs (see `integrations.md`).
 
 ## Build-time inputs
 
@@ -17,15 +17,15 @@ All of these are read once, during `npm run build`:
 | Guide, route, tool and shop entries | `content/guides/`, `content/suggestions/`, `content/tools/`, `content/shop/` (Markdown) | Page content (see `content-engine.md`) |
 | Itinerary | `content/itinerary.json` | Drives the homepage and, in phase 2, events (see `data-model.md`) |
 | Checklists | `content/checklists.json` | Preflight and flight to-do items (see `homepage.md`) |
-| Daily exchange rate | fetched during build from a free public source (see `integrations.md`) | Yen widget |
+| Daily exchange rate | fetched during build from Frankfurter (see `integrations.md`) | Yen widget fallback |
 | Last known rate | `content/rates.last.json`, committed | Fallback when the fetch fails |
 
 The build writes generated modules under `src/generated/`. Generated files are never edited by hand.
 
 ## Run-time boundaries
 
-- **No runtime network calls** to any host other than the site's own origin.
-- **Local state only.** The browser stores the checked state of checklist items in `localStorage` (see `data-model.md`). Nothing is sent back.
+- **Runtime network calls** go only to the site's own origin and to the two allow-listed data hosts, `api.frankfurter.dev` (yen rate) and `api.open-meteo.com` (Fuji forecast). These requests expose only generic request data such as the IP address (R17).
+- **Local state only.** The browser stores checklist ticks and cached rate and forecast responses in `localStorage` (see `data-model.md`). Nothing is sent back.
 - **Time zones.** All date logic that decides what the travellers see uses **Asia/Tokyo**. The Rome clock uses **Europe/Rome** for display only.
 
 ## Phase gating
@@ -45,12 +45,16 @@ rates fetch ──┘                                              │
                                                              │
                                                              ▼
                               browser: render pages, compute Japan-date state,
-                              store checklist ticks in localStorage
+                              store checklist ticks and cached data in localStorage
+                                                             │
+                                          GET (no cookies, no referrer)
+                                                             ▼
+                                   api.frankfurter.dev · api.open-meteo.com
 ```
 
 ## Acceptance criteria
 
 - [ ] `npm run build` produces a `dist/` folder with no server code.
-- [ ] The built site makes no network requests except to its own origin (verified in the browser network panel).
+- [ ] The built site makes no network requests except to its own origin and the two allow-listed data hosts (verified in the browser network panel).
 - [ ] No database, CMS, analytics or paid API appears in `package.json` or in the built output.
 - [ ] Changing `content/itinerary.json` changes the homepage after a rebuild, with no code edit.

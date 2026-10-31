@@ -1,4 +1,5 @@
 // Lists and detail pages for guides, suggestions, tools and shop (blueprint: frontend.md, content-engine.md).
+import { FujiWidget } from "@/components/FujiWidget";
 import { Cover, ItemCard } from "@/components/ItemCard";
 import { Link } from "@/lib/router";
 import { content, type Section } from "@/lib/content";
@@ -19,8 +20,9 @@ export function SectionList({ section }: { section: Section }) {
         <h1 className="text-3xl font-bold tracking-tight">{TITLES[section]}</h1>
         {INTROS[section] && <p className="mt-1 text-muted-foreground">{INTROS[section]}</p>}
       </header>
+      {section === "tools" && <FujiWidget />}
       {items.length === 0 ? (
-        <p className="py-16 text-center text-muted-foreground">Coming soon.</p>
+        section === "tools" ? null : <p className="py-16 text-center text-muted-foreground">Coming soon.</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 min-[900px]:grid-cols-3">
           {items.map((item) => (

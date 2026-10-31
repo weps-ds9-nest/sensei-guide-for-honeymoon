@@ -1,6 +1,6 @@
 # Data model
 
-_Purpose: define the structure of every data file the site reads. The itinerary format is provisional until the user supplies the real JSON._
+_Purpose: define the structure of every data file and local-storage key the site reads._
 
 ## 1. Itinerary — `content/itinerary.json`
 
@@ -40,7 +40,7 @@ Rules:
 - `flights` is ordered by departure. The outbound flight is the first entry.
 - `days` has one entry per calendar date. Duplicate dates fail the build.
 - `events` is read only in phase 2. Events are shown for the current Japan date and the matching `location`.
-- The example dates and places above are placeholders, not the real trip.
+- The example above shows the format. The real file currently lists only `days` (Tokyo 5–10 Nov, Osaka 11–16, Okinawa 17–26, Tokyo 27–29); `flights` are added when known, and the user corrects dates directly in the file.
 
 ## 2. Checklists — `content/checklists.json`
 
@@ -81,6 +81,20 @@ Browser-only. Written when a checklist item is ticked.
 - Missing keys mean unticked.
 - Nothing in this key is sent anywhere.
 
+## 4b. Cached live rate — `localStorage["sgj:rate:v1"]`
+
+Written by the yen widget after a successful browser fetch. Same shape as `rates.json` (`fetchedAt`, `rateDate`, `source`, `eurPerJpy`, `stale: false`). Used when younger than 6 hours; otherwise refreshed (see `integrations.md`).
+
+## 4c. Cached Fuji forecast — `localStorage["sgj:fuji:v1"]`
+
+```json
+{ "fetchedAt": "2026-11-06T08:40:00+09:00", "points": ["summit", "tokyo", "takao", "mitake", "kamakura", "hakone", "kawaguchiko", "shizuoka"], "hourly": [{ "time": ["…"], "cloud_cover_low": [0], "cloud_cover_mid": [0], "visibility": [24000] }] }
+```
+
+- `hourly` holds one entry per point, in `points` order, as returned by Open-Meteo.
+- Used when younger than 60 minutes; shown as "Last saved forecast" up to 24 hours; ignored after that (see `fuji.md`).
+- Every read is guarded: an unreadable or malformed value is treated as missing.
+
 ## 5. Content — `src/generated/content.json`
 
 Built from the Markdown entries. Shape per entry: `slug`, `title`, `summary`, `cover`, `order`, `tags`, `city`, `html`. Frontmatter rules are in `content-engine.md`.
@@ -90,4 +104,4 @@ Built from the Markdown entries. Shape per entry: `slug`, `title`, `summary`, `c
 - [ ] A build with a non-Tokyo `timezone` fails with a message naming the field.
 - [ ] A build with duplicate `days` dates fails and names the date.
 - [ ] `rates.json` contains no key other than those listed above.
-- [ ] Clearing `localStorage` returns every checklist item to unticked.
+- [ ] Clearing `localStorage` returns every checklist item to unticked and removes cached rate and forecast.

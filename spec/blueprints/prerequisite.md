@@ -11,18 +11,23 @@ _Purpose: list the accounts, services and credentials needed before implementati
 
 ## 2. Free exchange-rate source
 
-- A free public source that publishes daily EUR/JPY rates, with no account, no key and no payment, is chosen during implementation.
-- The chosen source must meet every rule in `integrations.md`.
+- Chosen: **Frankfurter** (ECB reference rates), `api.frankfurter.dev`. No account, no key, no payment.
+- Used at build time and from the browser (see `integrations.md`).
 - **Produces:** the source name, recorded in `rates.json` at build time.
 - **Credential:** none, if the source needs no key. If a key is ever required, the key goes in `.env.local` and is added to the registry below before use.
 
-## 3. Itinerary file
+## 3. Free weather source
 
-- The user supplies `content/itinerary.json` after the first stages are running.
-- This is not needed to start implementation. It is needed to finish the homepage state logic (`homepage.md`).
+- Chosen: **Open-Meteo** forecast API, `api.open-meteo.com`. No account, no key, no payment.
+- Used from the browser by the Fuji tool (see `fuji.md`).
+- **Credential:** none.
+
+## 4. Itinerary file
+
+- Supplied: `content/itinerary.json` holds the trip days. The user will correct exact dates in the file when confirmed; flight times are added when known.
 - **Produces:** the itinerary data itself, committed to the repository.
 
-## 4. Passphrase (phases 3–4, deferred)
+## 5. Passphrase (phases 3–4, deferred)
 
 - A passphrase is given to the friends in phase 3–4.
 - It is not needed now and is not required for implementation of phases 1–2.
@@ -42,5 +47,6 @@ Values are never written in this file or in the repository.
 - [ ] Vercel account exists and the user can open its dashboard.
 - [ ] Vercel CLI is logged in on the developer's machine.
 - [ ] Vercel project created with the random name from `deployment.md`.
-- [ ] Free exchange-rate source chosen and confirmed to need no key or payment.
-- [ ] Itinerary JSON received (needed before the homepage state logic can be finished, not before implementation starts).
+- [x] Free exchange-rate source chosen (Frankfurter) and confirmed to need no key or payment.
+- [x] Free weather source chosen (Open-Meteo) and confirmed to need no key or payment.
+- [x] Itinerary JSON received (dates to be corrected by the user; not a blocker).

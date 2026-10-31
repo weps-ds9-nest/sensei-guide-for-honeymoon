@@ -24,3 +24,9 @@ Source: `spec/proposals/2026-10-31-approved.md` (Soul implication section).
 
 - **Data-light by default:** performance and caching are core values for travellers on e-SIM, not an afterthought.
 - **Design governed by a written contract:** `design.md` decides how the project looks and feels; look is not decided ad hoc.
+
+## 2026-10-31 — Proposal approved: soul implications
+
+Source: `spec/proposals/2026-10-31-c-approved.md` (Soul implication section).
+
+- **Private from crawlers and trackers, not from the network:** browser requests to free data sources are acceptable when they expose only generic request data such as the IP address (no accounts, keys, cookies, tracking or identifying payloads).

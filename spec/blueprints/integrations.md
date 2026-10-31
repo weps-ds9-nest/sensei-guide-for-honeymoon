@@ -1,31 +1,33 @@
 # Integrations
 
-_Purpose: define every outside source the site uses, and the rules that keep them within the approved constraints: free, not paid, no CMS or database, and no tracking of the travellers._
+_Purpose: define every outside source the site uses, and the rules that keep them within the approved constraints: free, not paid, no CMS or database, no tracking of the travellers, and browser requests that expose only generic request data._
 
 ## Rules for any integration
 
 1. **Free.** No paid tier, no paid plan, no billing account.
 2. **No structural services.** No CMS, no database, no hosted backend.
 3. **No tracking.** No analytics, no advertising, no session recording, no error-reporting SDK in the browser.
-4. **Build-time only by default.** Data that changes is fetched during the build and stored in the site. The travellers' browsers do not contact the source.
-5. **No key in the browser.** Any key needed at build time is held in the environment, never shipped to the browser.
+4. **Browser requests are allowed only to allow-listed free data hosts** (R17). A request may expose generic request data, such as the travellers' IP address, and nothing more: no account, key, cookie, identifier or personal data in the URL, headers or body. Every such request is a plain `GET` with `credentials: "omit"` and `referrerPolicy: "no-referrer"`.
+5. **Allow-list.** Exactly two hosts: `api.frankfurter.dev` and `api.open-meteo.com`. The Content-Security-Policy `connect-src` names exactly these (see `deployment.md`). Adding a host needs a blueprint update.
+6. **No key in the browser.** Any key needed at build time is held in the environment, never shipped to the browser.
+7. **Graceful failure.** A failed browser request never breaks a page; each integration defines its fallback.
 
 ## Daily yen exchange rate
 
 - **Used by:** the yen widget (`homepage.md`).
-- **When fetched:** during `npm run build` (the `prebuild` step).
-- **Source:** a free public exchange-rate source that needs no account and no key. The exact source is chosen during implementation and must meet rules 1–5. Its name is recorded in `rates.json`.
-- **Output:** `src/generated/rates.json` (see `data-model.md`).
-- **Daily refresh:** the site is rebuilt once a day by a scheduled trigger on the hosting platform's free scheduler (see `deployment.md`). The mechanism is confirmed during implementation.
-- **Fallback:** if the fetch fails, the build copies `content/rates.last.json` (committed) into `rates.json` with `stale: true`. The build does not fail for this reason alone.
-- **Staleness:** the widget labels the rate as possibly out of date when its date is more than 7 days old.
+- **Source:** Frankfurter (ECB reference rates), `https://api.frankfurter.dev/v1/latest?base=JPY&symbols=EUR`. Free, no account, no key.
+- **Build time:** the `prebuild` step fetches the rate and writes `src/generated/rates.json` (see `data-model.md`). If the fetch fails, the build copies `content/rates.last.json` (committed) with `stale: true`. The build does not fail for this reason alone.
+- **Run time:** on load, the yen widget fetches the same URL from the browser. The result is cached in `localStorage` under `sgj:rate:v1` (see `data-model.md`); a cached rate younger than **6 hours** is used without a new request.
+- **Which rate is shown:** the one with the latest `rateDate` among the live response, the cache and the build-time rate. The build-time rate is always available, so the widget never shows an empty state.
+- **Staleness:** the widget labels the rate as possibly out of date when the shown rate's date is more than 7 days old.
+- **Daily rebuild:** kept, so the build-time fallback stays recent (see `deployment.md`).
 
-## Fuji visibility tool (later iteration)
+## Fuji visibility tool
 
-- **Used by:** the Tools page, as a future entry.
-- **Approach:** the same as the exchange rate. Fetch during build from reliable, free public sources, store the result, and show it with its date.
-- **Not allowed:** a browser request to a weather or camera service at run time.
-- **Open detail for its own blueprint:** the list of locations and the sources, decided when the tool is built.
+- **Used by:** the homepage and the Tools page (`fuji.md`).
+- **Source:** Open-Meteo forecast API, `https://api.open-meteo.com/v1/forecast`. Free, no account, no key.
+- **Run time only.** No build-time copy: a forecast fetched at build would be stale within hours.
+- Request shape, scoring, caching and fallback are defined in `fuji.md`.
 
 ## Hotel address cards (later iteration)
 
@@ -41,13 +43,15 @@ _Purpose: define every outside source the site uses, and the rules that keep the
 
 - Analytics, tag managers and advertising scripts.
 - Web-font services (fonts are system fonts).
-- Embedded third-party widgets, comment systems and social embeds.
+- Embedded third-party widgets, live cameras, comment systems and social embeds.
 - Paid APIs and any service with a paid tier.
 - CMS and database services.
 
 ## Acceptance criteria
 
 - [ ] `package.json` contains no analytics, advertising, error-reporting or CMS package.
-- [ ] The built site makes no request to any third-party host at run time.
+- [ ] In the browser network panel, the only third-party hosts contacted are `api.frankfurter.dev` and `api.open-meteo.com`.
+- [ ] Those requests carry no cookie, no key and no `Referer` header.
 - [ ] A forced fetch failure during build produces `rates.json` with `stale: true` and the build still succeeds.
-- [ ] The chosen exchange-rate source requires no account, no key and no payment.
+- [ ] With the network off, the yen widget shows the cached or build-time rate.
+- [ ] Both sources require no account, no key and no payment.

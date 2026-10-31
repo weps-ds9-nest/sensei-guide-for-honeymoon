@@ -4,14 +4,14 @@ _Purpose: keep the data the travellers download as low as possible, and reuse wh
 
 ## Rules
 
-1. **No runtime third-party requests** (see `integrations.md`).
+1. **Few, small runtime data requests.** Only the yen rate and the Fuji forecast are fetched by the browser, each cached in `localStorage` (6 hours and 60 minutes) so repeat visits rarely repeat them (see `integrations.md`, `fuji.md`). No other third-party request.
 2. **System fonts only.** No web fonts are downloaded.
 3. **Minimal JavaScript.** One vendor chunk (React and DOM) and one application chunk. Icons come only from individually imported icons, never a full icon set.
 4. **Images are small and lazy.**
    - WebP, at most 1600 px wide, at most 400 KB (see `content-engine.md`).
    - Every image has `loading="lazy"` and `decoding="async"`, except the one above the fold on the homepage and on a detail page.
    - Every image has an explicit aspect ratio so the layout does not shift as images load.
-5. **Content is built in.** Text, route data, itinerary and checklists ship inside the app bundle. Opening a page never needs a second request for data.
+5. **Content is built in.** Text, route data, itinerary, checklists and a fallback yen rate ship inside the app bundle. Opening a page never waits on a data request to render.
 
 ## Caching
 

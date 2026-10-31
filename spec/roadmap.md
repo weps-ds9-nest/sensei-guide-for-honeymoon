@@ -15,6 +15,9 @@ _Created: 2026-10-31. Agent appends to Backlog only. User controls ordering, pha
 - [ ] Populate Tools with hotel cards and the Fuji tool (later iteration). _(from proposal 2026-10-31)_
 - [ ] Implement the passphrase gate (phase 3–4). _(from proposal 2026-10-31)_
 - [ ] Populate Shop (user-defined). _(from proposal 2026-10-31)_
+- [ ] Fetch the yen rate live in the browser, with the build-time rate as fallback (R8, R17). _(from proposal 2026-10-31-c)_
+- [ ] Build the Fuji visibility tool as one component on the homepage and the Tools page, and open the CSP `connect-src` to the two allow-listed hosts (R26, R17). _(from proposal 2026-10-31-c)_
+- [ ] Add outbound/return flight times to the itinerary so the in-transit state works (R4, R7). _(from proposal 2026-10-31-c)_
 
 ## In Progress
 

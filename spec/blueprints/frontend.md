@@ -16,7 +16,7 @@ _Purpose: define the routing, layout, navigation and component structure of the 
 | `/` | Homepage | Dynamic; see `homepage.md` |
 | `/guides` | Guides list | Cards grid |
 | `/guides/:slug` | Guide detail | Opens on the same page as the list is replaced |
-| `/tools` | Tools list | Empty state: "Coming soon." until entries exist |
+| `/tools` | Tools list | The Fuji tool (`FujiWidget`, see `fuji.md`) at the top, then any Markdown tool entries |
 | `/suggestions` | Suggestions list | City cards |
 | `/suggestions/:slug` | Route detail | Numbered stops; see `content-engine.md` |
 | `/shop` | Shop list | Empty state: "Coming soon." until entries exist |
@@ -49,6 +49,9 @@ Each route change scrolls to the top. The browser back button works.
 
 - `SiteNav` — renders the top bar on desktop and the bottom bar on mobile from one item list.
 - `Home` — composes the homepage modules in the order given in `homepage.md`.
+- `Checklist` — the single checklist section with the Preflight | Flight segmented control (`homepage.md`).
+- `YenWidget` — headline rate and JPY → EUR table (`homepage.md`).
+- `FujiWidget` — the Fuji estimate; the same component on `/` and `/tools` (`fuji.md`).
 - `SectionList` — generic list for guides, tools, suggestions and shop, driven by the content data.
 - `SectionDetail` — generic detail for the same sections. Suggestion entries use the route layout.
 - `ItemCard` — one card: cover image or placeholder, title, summary, tags or city.
@@ -56,8 +59,9 @@ Each route change scrolls to the top. The browser back button works.
 
 ## Data fetching
 
-- Content is imported as static data from `src/generated/content.json`. There is no fetch at run time.
-- The itinerary and checklists are imported as static data from `src/generated/`.
+- Content is imported as static data from `src/generated/content.json`. There is no fetch at run time for content.
+- The itinerary, checklists and build-time rate are imported as static data from `src/generated/`.
+- Two browser fetches exist, both to allow-listed hosts (`integrations.md`): the live yen rate in `YenWidget` and the forecast in `FujiWidget`. Each reads its `localStorage` cache first and never blocks rendering.
 
 ## Acceptance criteria
 
@@ -66,4 +70,4 @@ Each route change scrolls to the top. The browser back button works.
 - [ ] On `/`, the home link is inactive on both bars.
 - [ ] The bottom bar keeps home in the middle position at 320px and 390px widths.
 - [ ] No horizontal scrollbar appears at 320px width.
-- [ ] Tools and Shop show "Coming soon." while empty.
+- [ ] `/tools` shows the Fuji tool; Shop shows "Coming soon." while empty.

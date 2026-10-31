@@ -18,6 +18,7 @@ Platform: Vercel
 
 ## Daily rate refresh
 
+- The browser fetches the live rate (see `integrations.md`); the daily rebuild keeps the build-time fallback recent.
 - A scheduled trigger on Vercel's free scheduler starts a production rebuild once a day. The trigger calls the project's deploy hook.
 - The exact mechanism (cron entry, deploy hook URL) is confirmed during implementation and must be free on the current plan.
 
@@ -41,7 +42,7 @@ Applied to every path:
 - `X-Frame-Options: DENY`
 - `X-Content-Type-Options: nosniff`
 - `Permissions-Policy`: camera, microphone, geolocation and interest-cohort all disabled.
-- `Content-Security-Policy`: `default-src 'self'`; scripts from `'self'` only; styles from `'self'` and `'unsafe-inline'`; images from `'self'` and `data:`; no connections except `'self'`; `frame-ancestors 'none'`; `base-uri 'none'`; `form-action 'none'`.
+- `Content-Security-Policy`: `default-src 'self'`; scripts from `'self'` only; styles from `'self'` and `'unsafe-inline'`; images from `'self'` and `data:`; `connect-src 'self' https://api.frankfurter.dev https://api.open-meteo.com` (exactly the allow-list in `integrations.md`); `frame-ancestors 'none'`; `base-uri 'none'`; `form-action 'none'`.
 
 Cache headers are set as described in `performance.md`.
 
@@ -57,5 +58,6 @@ Rewrites: any path that is not an asset, media file, `robots.txt`, `sw.js`, or t
 - [ ] `https://[site]/robots.txt` returns the disallow-all rule.
 - [ ] Every response carries the `X-Robots-Tag` and `Referrer-Policy` headers (checked in browser developer tools).
 - [ ] The page's HTML contains the robots meta tag.
+- [ ] The `Content-Security-Policy` header's `connect-src` lists exactly `'self'`, `https://api.frankfurter.dev` and `https://api.open-meteo.com`.
 - [ ] A direct visit to `/suggestions/tokyo-first-days` loads the page, not a 404.
 - [ ] A production deploy runs with `vercel --prod` and is logged in the implementation log.
