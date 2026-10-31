@@ -1,0 +1,18 @@
+{
+  "preflight": [
+    { "id": "passports", "label": "Passports packed and valid" },
+    { "id": "insurance", "label": "Travel insurance saved offline" },
+    { "id": "esim", "label": "e-SIM installed and data tested" },
+    { "id": "offline-maps", "label": "Japan area downloaded in offline maps" },
+    { "id": "ic-card", "label": "Suica or Pasmo ready on the phone" },
+    { "id": "hotel-addresses", "label": "Hotel addresses saved in Japanese" },
+    { "id": "bank-notice", "label": "Bank and cards told about the trip" },
+    { "id": "cash", "label": "Some yen cash in hand for arrival" }
+  ],
+  "flight": [
+    { "id": "check-in", "label": "Online check-in done" },
+    { "id": "boarding-pass", "label": "Boarding passes saved offline" },
+    { "id": "power-bank", "label": "Power bank packed in hand luggage" },
+    { "id": "liquids", "label": "Liquids and gels within the limits" }
+  ]
+}

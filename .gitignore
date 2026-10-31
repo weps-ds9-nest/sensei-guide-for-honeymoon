@@ -1,0 +1,24 @@
+# Spec-driven environment: spec/ and implementation/ are versioned together in
+# this one repository, so a blueprint change and the code implementing it are a
+# single commit. Only build artifacts and secrets are excluded.
+
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/dist/
+**/coverage/
+**/.turbo/
+**/.vercel/
+
+.env
+.env.local
+.env*.local
+*.log
+
+.claude/settings.local.json
+.DS_Store
+._*
+
+# susi-ghiso-japan app: generated at build time (blueprint: content-engine.md, integrations.md)
+**/src/generated/

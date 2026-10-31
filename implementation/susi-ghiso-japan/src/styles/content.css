@@ -1,0 +1,29 @@
+/* Article and route typography for Markdown content. Uses only theme tokens. */
+.prose-sgj h2 { font-size: 1.25rem; font-weight: 700; margin: 1.8em 0 0.5em; line-height: 1.25; }
+.prose-sgj h3 { font-size: 1.05rem; font-weight: 600; margin: 1.4em 0 0.4em; }
+.prose-sgj p { margin: 0 0 1em; }
+.prose-sgj ul, .prose-sgj ol { padding-left: 1.2em; margin: 0 0 1em; }
+.prose-sgj li { margin-bottom: 0.4em; }
+.prose-sgj blockquote { margin: 1em 0; padding: 10px 14px; border-left: 3px solid var(--ring); background: var(--muted); border-radius: 0 var(--radius) var(--radius) 0; }
+.prose-sgj code { background: var(--muted); padding: 1px 5px; border-radius: 6px; font-size: 0.9em; }
+.prose-sgj img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); margin: 14px 0; background: var(--muted); }
+
+/* Route layout: each ## heading is a numbered stop. */
+.route-sgj { counter-reset: stop; }
+.route-sgj h2 { position: relative; padding-left: 48px; min-height: 36px; display: flex; align-items: center; margin-top: 2.2em; }
+.route-sgj h2::before {
+  counter-increment: stop;
+  content: counter(stop);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
