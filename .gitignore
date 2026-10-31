@@ -22,3 +22,6 @@
 
 # susi-ghiso-japan app: generated at build time (blueprint: content-engine.md, integrations.md)
 **/src/generated/
+
+# Per-machine Impeccable settings (not shared)
+.impeccable/config.local.json
