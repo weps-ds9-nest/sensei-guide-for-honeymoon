@@ -98,3 +98,18 @@ _Append-only. Never delete entries. Maintained by the evolution agent._
 - Archive: spec/proposals/2026-10-31-d-approved.md (copy of draft.md; draft.md kept as the working copy)
 - Lifecycle state: Implementation (Refinement) (unchanged by approval)
 - Summary: The draft built from conversation save 006 was adopted into spec/current-state.md. R26 now names the seven Fuji viewpoints — Tokyo, Mount Takao (summit), Mount Mitake, Kamakura beaches & Enoshima (one row), Hakone, Lake Kawaguchiko and Shizuoka (Nihondaira, Miho) — still fetched in a single request, and its acceptance criterion covers each viewpoint. No soul implication and no new roadmap items, so soul.md and roadmap.md were not changed. spec/proposal.md, spec/docs/ and implementation/ were not changed.
+
+## 2026-10-31 — Conversation save 007: stale Fuji cache fix, verdict icons (CONFIRMS)
+
+- Event: conversation_save
+- Classification: CONFIRMS
+- Source: spec/docs/normalized/2026-10-31-conversation-save-007.md
+- Run log: spec/log/2026-10-31-009-evolution.md
+- Summary: Deepens R26. A saved forecast is discarded when its viewpoint set differs from the current one (fixes blank rows after adding viewpoints). Each Fuji verdict gets an inline SVG icon (Good: sun; Maybe: sun behind cloud; Unlikely: clouded summit), decorative next to the text verdict, coloured from new `--fuji-*` theme tokens (R20), ~0.5 kB and no requests (R18). Phone layout puts the place name on its own line. All implemented; blueprint fuji.md lags. Confirms streak: 2.
+
+## 2026-10-31 — Proposal approved (fifth approval)
+
+- Event: proposal approved
+- Archive: spec/proposals/2026-10-31-e-approved.md (copy of draft.md; draft.md kept as the working copy)
+- Lifecycle state: Implementation (Refinement) (unchanged by approval)
+- Summary: The draft built from conversation save 007 was adopted into spec/current-state.md. R26 now pairs each Fuji verdict with a small decorative icon (Good: Fuji with sun; Maybe: sun half behind a cloud; Unlikely: clouds over the summit), drawn inline with theme colours and no extra requests, and reuses a saved forecast only when it covers exactly the current viewpoints. Two acceptance criteria were added for these. No soul implication and no new roadmap items, so soul.md and roadmap.md were not changed. spec/proposal.md, spec/docs/ and implementation/ were not changed.

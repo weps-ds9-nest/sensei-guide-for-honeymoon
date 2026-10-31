@@ -1,6 +1,6 @@
 # Current State: Susi Ghiso Japan
 
-_Last updated: 2026-10-31 by: /approve-proposal (archive `spec/proposals/2026-10-31-d-approved.md`)_
+_Last updated: 2026-10-31 by: /approve-proposal (archive `spec/proposals/2026-10-31-e-approved.md`)_
 
 ## Lifecycle State
 
@@ -37,7 +37,7 @@ Private React Japan honeymoon guide for friends, hosted on Vercel, hidden from c
 - **R23 — Hosting:** Vercel.
 - **R24 — Design governance:** a `design.md` dictates how the project looks and feels; the implementation follows it.
 - **R25 — Timebox:** set up within about 4 hours.
-- **R26 — Fuji visibility tool:** an estimate of whether Mt Fuji is likely visible today and tomorrow (e.g. Good / Maybe / Unlikely, with best hours), from free weather data (Open-Meteo cloud cover and visibility) fetched by the browser under R17, in a single request. Labelled as an estimate, not a guarantee. Viewpoints (seven): Tokyo (city observation decks), Mount Takao (summit), Mount Mitake, Kamakura beaches & Enoshima (one shared row), Hakone (Lake Ashi), Lake Kawaguchiko, and Shizuoka (Nihondaira, Miho). Built as one reusable component shown in two places: on the homepage and as an entry on the Tools page.
+- **R26 — Fuji visibility tool:** an estimate of whether Mt Fuji is likely visible today and tomorrow (e.g. Good / Maybe / Unlikely, with best hours), from free weather data (Open-Meteo cloud cover and visibility) fetched by the browser under R17, in a single request. Labelled as an estimate, not a guarantee. Viewpoints (seven): Tokyo (city observation decks), Mount Takao (summit), Mount Mitake, Kamakura beaches & Enoshima (one shared row), Hakone (Lake Ashi), Lake Kawaguchiko, and Shizuoka (Nihondaira, Miho). Built as one reusable component shown in two places: on the homepage and as an entry on the Tools page. Each verdict is paired with a small decorative icon (Good: Fuji with sun; Maybe: sun half behind a cloud; Unlikely: clouds over the summit), drawn inline with colours from the theme (R20) and no extra requests (R18); the text verdict always stays. A forecast saved on the device is reused only if it covers exactly the current viewpoints.
 
 ## Technical Constraints
 
@@ -68,6 +68,8 @@ Private React Japan honeymoon guide for friends, hosted on Vercel, hidden from c
 - [ ] The deployed site returns a noindex / disallow-all signal to crawlers (R16)
 - [ ] No paid, structural or tracking services are used; browser requests go only to allow-listed free hosts and carry no keys, cookies or identifying data (R17)
 - [ ] The Fuji tool shows a dated visibility estimate for today and tomorrow, labelled as an estimate, for each of the seven viewpoints, from the same component on the homepage and the Tools page (R26)
+- [ ] Each Fuji verdict shows its matching icon next to the text label, in light and dark mode, with no extra network request (R26)
+- [ ] Changing the viewpoint list never shows blank rows from a previously saved forecast (R26)
 - [ ] Repeat visits are served from cache where possible (R18)
 - [ ] Access passphrase is implemented in phase 3–4 (R19), not in this iteration
 - [ ] The visual style can be changed from one place, and changes appear quickly (R20, R21)
@@ -87,7 +89,7 @@ Private React Japan honeymoon guide for friends, hosted on Vercel, hidden from c
 
 ## Latest Evolution Log Entry
 
-2026-10-31 — Proposal approved (archive `spec/proposals/2026-10-31-d-approved.md`): R26 now names seven Fuji viewpoints (Tokyo, Mount Takao summit, Mount Mitake, Kamakura & Enoshima, Hakone, Lake Kawaguchiko, Shizuoka), still in one request. Lifecycle: Implementation (Refinement).
+2026-10-31 — Proposal approved (archive `spec/proposals/2026-10-31-e-approved.md`): R26 adds a small decorative Fuji icon per verdict (sun / sun behind cloud / clouded summit), theme-coloured with no extra requests, and reuses a saved forecast only when it covers the current viewpoints. Lifecycle: Implementation (Refinement).
 
 ## Known Blockers
 

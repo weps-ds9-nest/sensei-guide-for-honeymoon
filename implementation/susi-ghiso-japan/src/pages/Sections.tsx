@@ -1,4 +1,5 @@
 // Lists and detail pages for guides, suggestions, tools and shop (blueprint: frontend.md, content-engine.md).
+import { DayTripPicker } from "@/components/DayTripPicker";
 import { FujiWidget } from "@/components/FujiWidget";
 import { Cover, ItemCard } from "@/components/ItemCard";
 import { Link } from "@/lib/router";
@@ -21,6 +22,7 @@ export function SectionList({ section }: { section: Section }) {
         {INTROS[section] && <p className="mt-1 text-muted-foreground">{INTROS[section]}</p>}
       </header>
       {section === "tools" && <FujiWidget />}
+      {section === "tools" && <DayTripPicker />}
       {items.length === 0 ? (
         section === "tools" ? null : <p className="py-16 text-center text-muted-foreground">Coming soon.</p>
       ) : (

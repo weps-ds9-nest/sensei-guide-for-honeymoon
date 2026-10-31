@@ -16,6 +16,7 @@ _Purpose: define how the site looks and how its look is changed. The visual styl
 ## Placeholder values
 
 - **Palette:** neutral greys with one accent colour. Light background, dark text. Names follow shadcn's default variables (`background`, `foreground`, `card`, `muted`, `primary`, `border`, `ring`), so a swap to any shadcn theme is a paste into `theme.css`.
+- **Illustration tokens:** the Fuji verdict icons use four extra tokens in `theme.css` — `--fuji-mountain`, `--fuji-snow`, `--fuji-cloud`, `--fuji-cloud-edge` — each with a dark-mode value; their sun uses the accent (`--maple`). See `fuji.md`.
 - **Radius:** one base value, 12px, used by cards, buttons and inputs.
 - **Typography:** system font stack only. Base size 16px; line height 1.6 for reading text; headings are bold and tight.
 - **Layout measures:** content gutter 16px; content max width 880px; top bar height 56px; bottom bar height 64px.

@@ -108,6 +108,9 @@ function readCache(): FujiCache | null {
     if (!raw) return null;
     const c = JSON.parse(raw);
     if (typeof c?.fetchedAt !== "string" || !Array.isArray(c?.points) || !Array.isArray(c?.hourly)) return null;
+    // A forecast saved for a different set of viewpoints (e.g. before one was added) is treated as missing,
+    // so the widget refetches instead of showing "—" for the new rows.
+    if (c.points.join(",") !== POINTS.map((p) => p.id).join(",") || c.hourly.length !== POINTS.length) return null;
     return c;
   } catch {
     return null;

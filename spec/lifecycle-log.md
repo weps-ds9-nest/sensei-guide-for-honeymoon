@@ -52,3 +52,17 @@ _Created: 2026-10-31. Append-only — records lifecycle state transitions. Never
 - From: Implementation(Refinement)
 - Platform: —
 - Summary: `/implement-specs` confirmed the seven Fuji viewpoints already match `fuji.md` (approval d) and refreshed the README. Not committed; not deployed.
+
+## 2026-10-31 — Implementation(Refinement)
+
+- Event: proposal_drafted
+- From: Implementation(Building)
+- Draft: spec/proposals/draft.md
+- Summary: Each Fuji verdict gains a small inline Mt Fuji icon coloured from the theme, the phone layout gives each viewpoint name its own line, and a saved forecast is discarded when the viewpoint set changes.
+
+## 2026-10-31 — Implementation(Building)
+
+- Event: implementation_updated
+- From: Implementation(Refinement)
+- Platform: —
+- Summary: `/implement-specs` confirmed the Fuji verdict icons, theme tokens, phone row layout and saved-forecast check already match `fuji.md` and `design.md` (approval e), and refreshed the README. Not committed; not deployed.

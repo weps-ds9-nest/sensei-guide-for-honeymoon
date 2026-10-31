@@ -1,0 +1,23 @@
+{
+  "label": "Osaka",
+  "order": 2,
+  "options": [
+    { "id": "temples", "label": "Temples & shrines" },
+    { "id": "castles", "label": "Castles" },
+    { "id": "momiji", "label": "Momiji" },
+    { "id": "onsen", "label": "Onsen" },
+    { "id": "offbeat", "label": "Off the beaten path" }
+  ],
+  "combinations": [
+    { "pick": ["temples", "castles", "momiji"], "result": "" },
+    { "pick": ["temples", "castles", "onsen"], "result": "" },
+    { "pick": ["temples", "castles", "offbeat"], "result": "" },
+    { "pick": ["temples", "momiji", "onsen"], "result": "" },
+    { "pick": ["temples", "momiji", "offbeat"], "result": "" },
+    { "pick": ["temples", "onsen", "offbeat"], "result": "" },
+    { "pick": ["castles", "momiji", "onsen"], "result": "" },
+    { "pick": ["castles", "momiji", "offbeat"], "result": "" },
+    { "pick": ["castles", "onsen", "offbeat"], "result": "" },
+    { "pick": ["momiji", "onsen", "offbeat"], "result": "" }
+  ]
+}

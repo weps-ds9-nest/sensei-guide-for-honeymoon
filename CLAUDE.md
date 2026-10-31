@@ -38,6 +38,33 @@ _No project-specific rules yet. Add constraints here as they emerge — e.g., "d
 
 _Nothing yet. Add blockers here that require human input before agents can proceed._
 
+## Quick Reference
+
+_App root: `implementation/susi-ghiso-japan/` (run all npm commands there). Human-facing table of every editable file: that folder's `README.md` § Edit the Content._
+
+**Where content lives (edit these, never `src/generated/`):**
+
+| Content | File(s) | Blueprint |
+|---|---|---|
+| Guides / routes / tools / shop entries | `content/{guides,suggestions,tools,shop}/*.md` (frontmatter + Markdown) | `content-engine.md`, `data-model.md` |
+| Trip days and locations | `content/itinerary.json` | `homepage.md`, `data-model.md` |
+| Checklists | `content/checklists.json` (ids must stay stable) | `homepage.md` |
+| Day-trip picker | `content/daytrips/<city>.json` (options + all 3-pick combinations), `content/daytrips/destinations/<slug>.md` (cards; `_TEMPLATE.md` ignored) | `daytrips.md` |
+| Photos | `public/media/` (local only: CSP `img-src 'self'`; ≤ 400 KB) | `performance.md` |
+
+**Where code lives:**
+
+- Content engine: `scripts/build-content.mjs` reads `content/`, validates it (errors fail the build, warnings don't) and writes `src/generated/{content,itinerary,checklists,daytrips}.json`.
+- Routing: `src/App.tsx` + `src/lib/router.tsx` (`/`, `/<section>`, `/<section>/<slug>`; sections in `src/lib/content.ts`).
+- Tools page: `src/pages/Sections.tsx` renders `FujiWidget` + `DayTripPicker` when section is `tools`.
+- Feature logic: `src/lib/fuji.ts` (tunable constants at top), `src/lib/rates.ts`, `src/lib/daytrips.ts`, `src/lib/journey.ts`, `src/lib/checks.ts`.
+- Look: `src/styles/theme.css` only. No hex colours, raw radii or font names in components (`design.md`).
+- Privacy: `vercel.json` (noindex headers, no-referrer, CSP allowlist: only Frankfurter + Open-Meteo), `public/robots.txt`. External links use `rel="noopener noreferrer"`. A new external request must be added to the CSP and to `integrations.md`.
+
+**Commands:** `npm run content:check` (validate), `npm run dev`, `npm run build` (rates → content → tsc → vite).
+
+**Adding a feature:** write or extend its blueprint in `spec/blueprints/`, keep editable data in `content/` (validated in `build-content.mjs`), and add a row to the table above and to the README § Edit the Content.
+
 ---
 
 _Brain Version: 0.11_

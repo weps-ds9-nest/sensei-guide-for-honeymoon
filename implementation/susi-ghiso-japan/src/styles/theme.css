@@ -20,6 +20,14 @@
   --shell-foreground: #eef2ea;
   --alert: #8f5500;
   --destructive: #a3271d;
+  /* Fuji icons (FujiWidget): mountain, snow cap, cloud fill and outline. The sun uses --maple. */
+  --fuji-mountain: #4a5d6e;
+  --fuji-snow: #ffffff;
+  --fuji-cloud: #d9dfd6;
+  --fuji-cloud-edge: #7f8b82;
+  /* Text and scrim over photos (day-trip card); same in both modes. */
+  --on-image: #ffffff;
+  --scrim: #0b110d;
   --radius: 12px;
   --gutter: 16px;
   --max-width: 880px;
@@ -47,6 +55,10 @@
     --shell-foreground: #e6ece3;
     --alert: #e0a84a;
     --destructive: #e0604f;
+    --fuji-mountain: #6f8496;
+    --fuji-snow: #eef2f5;
+    --fuji-cloud: #3a4a3f;
+    --fuji-cloud-edge: #7d8c80;
     color-scheme: dark;
   }
 }
@@ -68,6 +80,10 @@
   --shell-foreground: #e6ece3;
   --alert: #e0a84a;
   --destructive: #e0604f;
+  --fuji-mountain: #6f8496;
+  --fuji-snow: #eef2f5;
+  --fuji-cloud: #3a4a3f;
+  --fuji-cloud-edge: #7d8c80;
   color-scheme: dark;
 }
 
@@ -88,6 +104,8 @@
   --color-shell-foreground: var(--shell-foreground);
   --color-alert: var(--alert);
   --color-destructive: var(--destructive);
+  --color-on-image: var(--on-image);
+  --color-scrim: var(--scrim);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);

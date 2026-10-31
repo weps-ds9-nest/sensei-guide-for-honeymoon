@@ -54,7 +54,8 @@ All thresholds live in one constants block in the scoring module, so they can be
 ## Caching and failure
 
 - The response is cached in `localStorage` under `sgj:fuji:v1` with its fetch time (see `data-model.md`).
-- A cached forecast younger than **60 minutes** is used without a new request.
+- A cached forecast is valid only if its `points` list equals the current point ids, in order (summit first, then the viewpoints). Any other cache — e.g. saved before a viewpoint was added — is treated as missing and refetched.
+- A valid cached forecast younger than **60 minutes** is used without a new request.
 - On load, an older cache is shown at once and a refresh is requested in the background.
 - **Offline or failed request:** show the cached forecast with its fetch time and the label "Last saved forecast". With no cache at all, show "Forecast unavailable offline." The rest of the page is unaffected.
 - A cached forecast older than **24 hours** is not shown; the no-cache message appears instead.
@@ -66,6 +67,17 @@ All thresholds live in one constants block in the scoring module, so they can be
 - **Homepage:** after the checklist section (see `homepage.md`). Shown in the `pre-trip`, `in-transit` and `in-japan` states; removed `after-trip`.
 - **Tools page:** shown at the top of `/tools`, above any Markdown tool entries, in every state (see `frontend.md`).
 - Layout: a heading "Fuji today", the caption, then one row per viewpoint with today's and tomorrow's verdict and best hours. Verdicts carry a text label, never colour alone.
+- **Row layout:** below 640px, the viewpoint name takes its own line and Today and Tomorrow sit side by side beneath it. From 640px, one line per viewpoint: name, Today, Tomorrow.
+
+## Verdict icons
+
+- Each verdict is preceded by a small inline SVG icon (`FujiIcon`), about 32 × 24 px. There are three:
+  - **Good:** Fuji with the sun beside the peak.
+  - **Maybe:** Fuji with the sun half behind a small cloud.
+  - **Unlikely:** no sun; clouds covering the summit.
+- The icons are drawn in the component code. No image file and no network request.
+- Decorative: `aria-hidden="true"`. The text verdict next to the icon carries the meaning.
+- Colours come from theme tokens in `src/styles/theme.css` (see `design.md`): `--fuji-mountain`, `--fuji-snow`, `--fuji-cloud`, `--fuji-cloud-edge`, each with a dark-mode value. The sun uses `--maple`.
 
 ## Acceptance criteria
 
@@ -78,3 +90,6 @@ All thresholds live in one constants block in the scoring module, so they can be
 - [ ] The same component renders on `/` and `/tools`, with one row for each of the seven viewpoints in the order above.
 - [ ] One request returns data for all eight points.
 - [ ] The caption "Estimate from cloud forecasts, not a camera." is always visible.
+- [ ] Each verdict shows its matching icon beside the text, in light and dark mode, with no extra network request.
+- [ ] A saved forecast whose point list differs from the current one is ignored and refetched; no row shows "—" because of it.
+- [ ] At 320px width, each viewpoint name sits on its own line above Today and Tomorrow.

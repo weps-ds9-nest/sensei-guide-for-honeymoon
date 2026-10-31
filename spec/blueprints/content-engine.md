@@ -50,6 +50,8 @@ Validation rules:
 - **Fail the build:** missing `title`, invalid slug, duplicate slug, missing referenced image.
 - **Warn only:** image over 400 KB, missing alt text, `order` missing on a file that has siblings.
 
+The same script also builds the day-trip picker data (`content/daytrips/` → `src/generated/daytrips.json`) with its own rules. See `daytrips.md`.
+
 ## Image rules
 
 - Format: WebP.

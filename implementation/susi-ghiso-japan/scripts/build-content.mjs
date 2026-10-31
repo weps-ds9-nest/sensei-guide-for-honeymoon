@@ -131,11 +131,90 @@ function validateChecklists(cl) {
   return { preflight: cl.preflight ?? [], flight: cl.flight ?? [] };
 }
 
+// Day-trip picker (blueprint: daytrips.md). content/daytrips/<city>.json + destinations/<slug>.md.
+const LINK_LINE = /^\s*[-*]\s+\[([^\]]+)\]\(([^)\s]+)\)\s*$/;
+const comboKey = (ids) => [...ids].sort().join("+");
+
+function combinationsOf(ids, k) {
+  if (k === 0) return [[]];
+  return ids.flatMap((id, i) => combinationsOf(ids.slice(i + 1), k - 1).map((rest) => [id, ...rest]));
+}
+
+async function buildDaytrips() {
+  const dir = path.join(CONTENT, "daytrips");
+  const destDir = path.join(dir, "destinations");
+  const destinations = {};
+  if (existsSync(destDir)) {
+    for (const file of (await readdir(destDir)).filter((f) => f.endsWith(".md") && !f.startsWith("_")).sort()) {
+      const label = `daytrips/destinations/${file}`;
+      const slug = file.replace(/\.md$/, "");
+      if (!SLUG.test(slug)) fail(`${label}: file name "${slug}" must be lowercase letters, digits and hyphens`);
+      const parsed = parseFrontmatter(await readFile(path.join(destDir, file), "utf8"), label);
+      if (!parsed) continue;
+      const { data, body } = parsed;
+      if (!data.title) fail(`${label}: "title" is required`);
+      let image = data.image ? String(data.image) : null;
+      if (image && !existsSync(path.join(PUBLIC, image))) {
+        warn(`${label}: image not found in public/: ${image} (showing a plain colour instead)`);
+        image = null;
+      } else if (image) await checkImage(image, label);
+      const links = [];
+      for (const line of body.replace(/<!--[\s\S]*?-->/g, "").split(/\r?\n/)) {
+        if (!line.trim()) continue;
+        const m = line.match(LINK_LINE);
+        if (!m) {
+          warn(`${label}: ignored line "${line.trim()}" (links must look like "- [Text](https://...)")`);
+          continue;
+        }
+        if (!m[2].startsWith("https://")) fail(`${label}: link "${m[2]}" must start with https://`);
+        links.push({ label: m[1].trim(), url: m[2] });
+      }
+      destinations[slug] = { slug, title: String(data.title ?? slug), summary: data.summary ? String(data.summary) : "", image, links };
+    }
+  }
+
+  const cities = [];
+  const cityFiles = existsSync(dir) ? (await readdir(dir)).filter((f) => f.endsWith(".json") && !f.startsWith("_")).sort() : [];
+  for (const file of cityFiles) {
+    const label = `daytrips/${file}`;
+    const city = await readJsonIfExists(path.join(dir, file));
+    if (!city) continue;
+    const id = file.replace(/\.json$/, "");
+    const optionIds = new Set();
+    for (const o of city.options ?? []) {
+      if (!o.id || !o.label) fail(`${label}: every option needs "id" and "label"`);
+      if (optionIds.has(o.id)) fail(`${label}: duplicate option id "${o.id}"`);
+      optionIds.add(o.id);
+    }
+    if (optionIds.size < 3) fail(`${label}: needs at least 3 options`);
+    const results = {};
+    for (const c of city.combinations ?? []) {
+      const pick = Array.isArray(c.pick) ? c.pick : [];
+      const where = `${label}: combination [${pick.join(", ")}]`;
+      if (pick.length !== 3 || new Set(pick).size !== 3) fail(`${where} must list exactly 3 different options`);
+      for (const p of pick) if (!optionIds.has(p)) fail(`${where} uses unknown option "${p}"`);
+      const key = comboKey(pick);
+      if (key in results) fail(`${where} is listed twice`);
+      const result = String(c.result ?? "");
+      if (!result) warn(`${where} has no result yet`);
+      else if (!destinations[result]) fail(`${where}: result "${result}" has no file daytrips/destinations/${result}.md`);
+      results[key] = result || null;
+    }
+    for (const combo of combinationsOf([...optionIds], 3)) {
+      if (!(comboKey(combo) in results)) warn(`${label}: combination [${combo.join(", ")}] is not listed`);
+    }
+    cities.push({ id, label: String(city.label ?? id), order: typeof city.order === "number" ? city.order : 999, options: city.options ?? [], results });
+  }
+  cities.sort((a, b) => a.order - b.order || a.label.localeCompare(b.label));
+  return { cities, destinations };
+}
+
 async function main() {
   const content = {};
   for (const s of SECTIONS) content[s] = await buildSection(s);
   const itinerary = validateItinerary(await readJsonIfExists(path.join(CONTENT, "itinerary.json")));
   const checklists = validateChecklists(await readJsonIfExists(path.join(CONTENT, "checklists.json")));
+  const daytrips = await buildDaytrips();
 
   for (const w of warnings) console.warn(`[content] WARNING ${w}`);
   if (errors.length) {
@@ -151,6 +230,7 @@ async function main() {
   await writeFile(path.join(GENERATED, "content.json"), JSON.stringify(content));
   await writeFile(path.join(GENERATED, "itinerary.json"), JSON.stringify(itinerary));
   await writeFile(path.join(GENERATED, "checklists.json"), JSON.stringify(checklists));
+  await writeFile(path.join(GENERATED, "daytrips.json"), JSON.stringify(daytrips));
   console.log(`[content] written src/generated (${counts}; itinerary ${itinerary ? "present" : "absent"})`);
 }
 
