@@ -15,14 +15,14 @@ function HomeItem({ active, compact }: { active: boolean; compact: boolean }) {
   const label = "Home";
   if (active) {
     return (
-      <span aria-disabled="true" aria-current="page" className={cn("flex items-center gap-1.5 text-sm font-semibold text-muted-foreground", compact && "flex-col text-xs")}>
+      <span aria-disabled="true" aria-current="page" className={cn("flex items-center gap-1.5 rounded-md bg-shell-foreground px-2 py-2 text-sm font-semibold text-shell", compact && "flex-col text-xs")}>
         <Home className="size-5" aria-hidden="true" />
         {label}
       </span>
     );
   }
   return (
-    <Link to="/" className={cn("flex items-center gap-1.5 rounded-md px-2 py-2 text-sm font-medium hover:bg-accent", compact && "flex-col text-xs")}>
+    <Link to="/" className={cn("flex items-center gap-1.5 rounded-md px-2 py-2 text-sm font-medium hover:bg-shell-foreground/10", compact && "flex-col text-xs")}>
       <Home className="size-5" aria-hidden="true" />
       {label}
     </Link>
@@ -36,7 +36,7 @@ function PageItem({ to, label, active, compact }: { to: string; label: string; a
       aria-current={active ? "page" : undefined}
       className={cn(
         "flex min-h-11 items-center justify-center rounded-md px-3 text-sm font-medium",
-        active ? "bg-primary text-primary-foreground" : "hover:bg-accent",
+        active ? "bg-shell-foreground font-semibold text-shell" : "hover:bg-shell-foreground/10",
         compact && "flex-1 px-1 text-xs",
       )}
     >
@@ -52,7 +52,7 @@ export function SiteNav() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 hidden h-(--top-bar-height) items-center gap-4 border-b border-border bg-background/95 px-6 backdrop-blur sm:flex">
+      <header className="sticky top-0 z-20 hidden h-(--top-bar-height) items-center gap-4 bg-shell px-6 text-shell-foreground sm:flex">
         <nav aria-label="Main" className="flex w-full max-w-(--max-width) mx-auto items-center gap-2">
           <HomeItem active={onHome} compact={false} />
           <div className="ml-auto flex items-center gap-1">
@@ -65,7 +65,7 @@ export function SiteNav() {
 
       <nav
         aria-label="Main"
-        className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-background/95 backdrop-blur sm:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 bg-shell text-shell-foreground sm:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="mx-auto flex h-(--bottom-bar-height) max-w-(--max-width) items-center gap-1 px-2">

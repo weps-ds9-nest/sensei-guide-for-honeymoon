@@ -1,0 +1,105 @@
+{
+  "timezone": "Asia/Tokyo",
+  "days": [
+    {
+      "date": "2026-11-05",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-06",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-07",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-08",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-09",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-10",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-11",
+      "location": "Osaka"
+    },
+    {
+      "date": "2026-11-12",
+      "location": "Osaka"
+    },
+    {
+      "date": "2026-11-13",
+      "location": "Osaka"
+    },
+    {
+      "date": "2026-11-14",
+      "location": "Osaka"
+    },
+    {
+      "date": "2026-11-15",
+      "location": "Osaka"
+    },
+    {
+      "date": "2026-11-16",
+      "location": "Osaka"
+    },
+    {
+      "date": "2026-11-17",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-18",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-19",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-20",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-21",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-22",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-23",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-24",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-25",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-26",
+      "location": "Okinawa"
+    },
+    {
+      "date": "2026-11-27",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-28",
+      "location": "Tokyo"
+    },
+    {
+      "date": "2026-11-29",
+      "location": "Tokyo"
+    }
+  ]
+}

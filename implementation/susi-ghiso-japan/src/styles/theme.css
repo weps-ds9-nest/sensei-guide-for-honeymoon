@@ -1,60 +1,73 @@
-/* Single source of visual truth (blueprint: design.md).
-   Placeholder values: neutral palette, one accent. Change values here only. */
+/* Single source of visual truth (blueprint: design.md, PRODUCT.md).
+   World: a Japanese garden. Moss and stone neutrals, one maple-red accent for selection
+   and the "now" marker, ochre for alerts, deep moss shell. Change values here only. */
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --foreground: #171717;
-  --card: #ffffff;
-  --card-foreground: #171717;
-  --muted: #f0f0f0;
-  --muted-foreground: #5c5c5c;
-  --primary: #404040;
-  --primary-foreground: #fafafa;
-  --accent: #e5e5e5;
-  --border: #e0e0e0;
-  --ring: #737373;
-  --destructive: #b91c1c;
+  --background: #eef0eb;
+  --foreground: #1c2620;
+  --card: #f6f7f3;
+  --card-foreground: #1c2620;
+  --muted: #e1e6dd;
+  --muted-foreground: #4d5a50;
+  --primary: #22392d;
+  --primary-foreground: #f3f5f0;
+  --accent: #e0e5dc;
+  --border: #c9d1c5;
+  --ring: #a3271d;
+  --maple: #a3271d;
+  --shell: #22392d;
+  --shell-foreground: #eef2ea;
+  --alert: #8f5500;
+  --destructive: #a3271d;
   --radius: 12px;
   --gutter: 16px;
   --max-width: 880px;
   --top-bar-height: 56px;
   --bottom-bar-height: 64px;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Sans", "Noto Sans JP", sans-serif;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
-    --background: #141414;
-    --foreground: #f5f5f5;
-    --card: #1e1e1e;
-    --card-foreground: #f5f5f5;
-    --muted: #262626;
-    --muted-foreground: #a3a3a3;
-    --primary: #e5e5e5;
-    --primary-foreground: #171717;
-    --accent: #2a2a2a;
-    --border: #2e2e2e;
-    --ring: #a3a3a3;
-    --destructive: #f87171;
+    --background: #111813;
+    --foreground: #e6ece3;
+    --card: #18211b;
+    --card-foreground: #e6ece3;
+    --muted: #1f2a22;
+    --muted-foreground: #a6b3a7;
+    --primary: #dfe8dc;
+    --primary-foreground: #132017;
+    --accent: #1d2820;
+    --border: #2b3a2f;
+    --ring: #e0604f;
+    --maple: #e0604f;
+    --shell: #0b110d;
+    --shell-foreground: #e6ece3;
+    --alert: #e0a84a;
+    --destructive: #e0604f;
     color-scheme: dark;
   }
 }
 
 .dark {
-  --background: #141414;
-  --foreground: #f5f5f5;
-  --card: #1e1e1e;
-  --card-foreground: #f5f5f5;
-  --muted: #262626;
-  --muted-foreground: #a3a3a3;
-  --primary: #e5e5e5;
-  --primary-foreground: #171717;
-  --accent: #2a2a2a;
-  --border: #2e2e2e;
-  --ring: #a3a3a3;
-  --destructive: #f87171;
+  --background: #111813;
+  --foreground: #e6ece3;
+  --card: #18211b;
+  --card-foreground: #e6ece3;
+  --muted: #1f2a22;
+  --muted-foreground: #a6b3a7;
+  --primary: #dfe8dc;
+  --primary-foreground: #132017;
+  --accent: #1d2820;
+  --border: #2b3a2f;
+  --ring: #e0604f;
+  --maple: #e0604f;
+  --shell: #0b110d;
+  --shell-foreground: #e6ece3;
+  --alert: #e0a84a;
+  --destructive: #e0604f;
   color-scheme: dark;
 }
 
@@ -70,6 +83,10 @@
   --color-accent: var(--accent);
   --color-border: var(--border);
   --color-ring: var(--ring);
+  --color-maple: var(--maple);
+  --color-shell: var(--shell);
+  --color-shell-foreground: var(--shell-foreground);
+  --color-alert: var(--alert);
   --color-destructive: var(--destructive);
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -96,8 +113,15 @@
   a {
     color: inherit;
   }
+  ::selection {
+    background: color-mix(in srgb, var(--maple) 28%, transparent);
+    color: var(--foreground);
+  }
   :focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+  input[type="checkbox"] {
+    accent-color: var(--maple);
   }
 }

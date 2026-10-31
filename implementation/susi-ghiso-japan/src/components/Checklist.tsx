@@ -1,12 +1,13 @@
 // Checklist with ticks stored on this device (blueprint: homepage.md, data-model.md).
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+// Ruled rows, not cards: each row is a 44px tap target with its own divider.
+import { useId, useState } from "react";
 import { readChecks, writeChecks, type Checks } from "@/lib/checks";
 
 export type ChecklistItem = { id: string; label: string };
 
 export function Checklist({ title, group, items }: { title: string; group: keyof Checks; items: ChecklistItem[] }) {
   const [checks, setChecks] = useState<Checks>(() => readChecks());
+  const headingId = useId();
   const done = items.filter((i) => checks[group][i.id]).length;
 
   const toggle = (id: string, value: boolean) => {
@@ -15,47 +16,37 @@ export function Checklist({ title, group, items }: { title: string; group: keyof
     writeChecks(next);
   };
 
-  if (items.length === 0) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">Nothing on the list yet.</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <p className="text-xs text-muted-foreground">
-          {done} of {items.length} done
-        </p>
-      </CardHeader>
-      <CardContent>
-        <ul className="grid gap-1">
+    <section aria-labelledby={headingId} className="flex flex-col gap-3">
+      <div className="flex items-baseline justify-between gap-4 border-b-2 border-foreground pb-2">
+        <h2 id={headingId} className="text-xl font-semibold tracking-tight">
+          {title}
+        </h2>
+        {items.length > 0 && <p className="text-sm tabular-nums text-muted-foreground">{done} of {items.length} done</p>}
+      </div>
+
+      {items.length === 0 ? (
+        <p className="text-sm text-muted-foreground">Nothing on the list yet.</p>
+      ) : (
+        <ul className="flex flex-col">
           {items.map((item) => {
             const checked = Boolean(checks[group][item.id]);
             return (
-              <li key={item.id}>
-                <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-md px-2 py-2 hover:bg-accent">
+              <li key={item.id} className="border-b border-border last:border-b-0">
+                <label className="flex min-h-11 cursor-pointer items-center gap-3 py-2 hover:bg-accent">
                   <input
                     type="checkbox"
-                    className="size-5 shrink-0 accent-[var(--primary)]"
+                    className="size-5 shrink-0"
                     checked={checked}
                     onChange={(e) => toggle(item.id, e.target.checked)}
                   />
-                  <span className={checked ? "text-sm text-muted-foreground line-through" : "text-sm"}>{item.label}</span>
+                  <span className={checked ? "text-muted-foreground line-through" : ""}>{item.label}</span>
                 </label>
               </li>
             );
           })}
         </ul>
-      </CardContent>
-    </Card>
+      )}
+    </section>
   );
 }
