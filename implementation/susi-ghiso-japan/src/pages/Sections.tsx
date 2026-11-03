@@ -1,30 +1,45 @@
-// Lists and detail pages for guides, suggestions, tools and shop (blueprint: frontend.md, content-engine.md).
+// Lists and detail pages for guides, routes, tools and shop (blueprint: frontend.md, content-engine.md).
 import { DayTripPicker } from "@/components/DayTripPicker";
 import { FujiWidget } from "@/components/FujiWidget";
 import { Cover, ItemCard } from "@/components/ItemCard";
+import { RouteView } from "@/components/RouteView";
+import { TipsBoard } from "@/components/TipsBoard";
 import { Link } from "@/lib/router";
-import { content, type Section } from "@/lib/content";
+import { useState } from "react";
+import { content, routeTags, type Section } from "@/lib/content";
 
-const TITLES: Record<Section, string> = { guides: "Guides", suggestions: "Suggestions", tools: "Tools", shop: "Shop" };
+const TITLES: Record<Section, string> = { guides: "Tips", routes: "Routes", tools: "Tools", shop: "Shop" };
 const INTROS: Record<Section, string> = {
-  guides: "Essentials and tricks worth knowing before you go out.",
-  suggestions: "Routes and places, with where to eat and what to see.",
+  guides: "Quick tips worth knowing before you go out. Pick a topic.",
+  routes: "Suggested routes, stage by stage, with where to eat and what to see.",
   tools: "Things that make Japan easier.",
   shop: "",
 };
 
 export function SectionList({ section }: { section: Section }) {
-  const items = content[section];
+  const [tag, setTag] = useState<string | null>(null);
+  if (section === "guides") return <TipsBoard intro={INTROS.guides} />;
+  const items = content[section].filter((i) => !tag || i.tags.includes(tag));
   return (
     <div className="grid gap-6">
       <header>
         <h1 className="text-3xl font-bold tracking-tight">{TITLES[section]}</h1>
         {INTROS[section] && <p className="mt-1 text-muted-foreground">{INTROS[section]}</p>}
       </header>
+      {section === "routes" && (
+        <div className="tips-chips" role="toolbar" aria-label="Filter routes">
+          <button type="button" aria-pressed={tag === null} onClick={() => setTag(null)}>All</button>
+          {routeTags.map((t) => (
+            <button key={t.id} type="button" aria-pressed={tag === t.id} onClick={() => setTag(tag === t.id ? null : t.id)}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      )}
       {section === "tools" && <FujiWidget />}
       {section === "tools" && <DayTripPicker />}
       {items.length === 0 ? (
-        section === "tools" ? null : <p className="py-16 text-center text-muted-foreground">Coming soon.</p>
+        section === "tools" ? null : <p className="py-16 text-center text-muted-foreground">{tag ? "No routes with this tag yet." : "Coming soon."}</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 min-[900px]:grid-cols-3">
           {items.map((item) => (
@@ -39,7 +54,8 @@ export function SectionList({ section }: { section: Section }) {
 export function SectionDetail({ section, slug }: { section: Section; slug: string }) {
   const item = content[section].find((i) => i.slug === slug);
   if (!item) return <NotFound />;
-  const isRoute = section === "suggestions";
+  if (section === "guides") return <TipsBoard intro={INTROS.guides} initial={slug} />;
+  if (section === "routes") return <RouteView item={item} />;
   return (
     <article className="grid gap-4">
       <Link to={`/${section}`} className="text-sm font-semibold text-muted-foreground hover:underline">
@@ -51,7 +67,7 @@ export function SectionDetail({ section, slug }: { section: Section; slug: strin
         {item.summary && <p className="mt-2 text-lg text-muted-foreground">{item.summary}</p>}
       </header>
       {item.cover && <Cover item={item} className="aspect-16/10 w-full rounded-lg object-cover" />}
-      <div className={`prose-sgj ${isRoute ? "route-sgj" : ""}`} dangerouslySetInnerHTML={{ __html: item.html }} />
+      <div className="prose-sgj" dangerouslySetInnerHTML={{ __html: item.html }} />
     </article>
   );
 }

@@ -8,22 +8,76 @@
 .prose-sgj code { background: var(--muted); padding: 1px 5px; border-radius: 6px; font-size: 0.9em; }
 .prose-sgj img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); margin: 14px 0; background: var(--muted); }
 
-/* Route layout: each ## heading is a numbered stop. */
-.route-sgj { counter-reset: stop; }
-.route-sgj h2 { position: relative; padding-left: 48px; min-height: 36px; display: flex; align-items: center; margin-top: 2.2em; }
-.route-sgj h2::before {
-  counter-increment: stop;
-  content: counter(stop);
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  display: grid;
-  place-items: center;
-  font-weight: 700;
+/* Route page (blueprint: routes.md). Hero follows the current stage; rail is sticky; stages reveal on scroll. */
+.route { --route-top: 0px; --rail: 44px; display: grid; gap: 20px; }
+@media (min-width: 640px) { .route { --route-top: var(--top-bar-height); } }
+@media (min-width: 760px) { .route { --rail: 170px; } }
+
+.route-hero {
+  position: sticky; top: var(--route-top); z-index: 10;
+  height: clamp(170px, 30vh, 300px); overflow: hidden;
+  border-radius: var(--radius); background: var(--shell); color: var(--on-image);
+  display: flex; align-items: flex-end;
 }
+.route-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity 700ms ease, transform 1400ms ease; }
+.route-hero-img.is-on { opacity: 1; transform: scale(1); }
+.route-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, var(--scrim) 82%, transparent), color-mix(in srgb, var(--scrim) 10%, transparent) 70%); }
+.route-hero-text { position: relative; z-index: 1; padding: 18px 20px; }
+.route-hero-city { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.85; margin: 0; }
+.route-hero-title { font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.01em; margin: 2px 0 6px; }
+.route-hero-stage { margin: 0; font-weight: 600; animation: route-fade-up 450ms ease both; }
+.route-hero-credit { position: absolute; z-index: 1; right: 10px; top: 8px; margin: 0; font-size: 0.65rem; opacity: 0.75; }
+
+.route-intro { font-size: 1.05rem; }
+.route-body { display: grid; grid-template-columns: var(--rail) 1fr; gap: 20px; }
+
+.route-rail { position: sticky; top: calc(var(--route-top) + clamp(170px, 30vh, 300px) + 24px); align-self: start; }
+.route-rail ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; position: relative; }
+.route-rail-track { position: absolute; left: 4px; top: 6px; bottom: 6px; width: 1px; background: var(--border); }
+.route-rail-fill { height: 100%; background: var(--maple); transform-origin: top; transition: transform 160ms linear; }
+.route-rail button { all: unset; cursor: pointer; display: flex; align-items: flex-start; gap: 14px; color: var(--muted-foreground); font-size: 0.78rem; line-height: 1.3; transition: color 250ms; }
+.route-rail button:hover { color: var(--foreground); }
+.route-rail-dot { flex: none; width: 9px; height: 9px; margin-top: 2px; border-radius: 999px; background: var(--background); box-shadow: inset 0 0 0 1px var(--border); position: relative; transition: background 300ms, box-shadow 300ms, transform 300ms; }
+.route-rail-num { display: block; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; opacity: 0.7; font-variant-numeric: tabular-nums; }
+.route-rail .is-done .route-rail-dot { background: var(--maple); box-shadow: none; }
+.route-rail .is-active { color: var(--foreground); }
+.route-rail .is-active .route-rail-dot { background: var(--maple); box-shadow: 0 0 0 4px color-mix(in srgb, var(--maple) 18%, transparent); transform: scale(1.15); }
+.route-rail .is-active .route-rail-num { color: var(--maple); opacity: 1; }
+.route-rail button:focus-visible .route-rail-dot { outline: 2px solid var(--ring); outline-offset: 3px; }
+@media (max-width: 759px) {
+  .route { --rail: 12px; }
+  .route-rail-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .route-rail ol { gap: 28px; }
+}
+
+.route-stages { list-style: none; margin: 0; padding: 0; display: grid; gap: 56px; padding-bottom: 30vh; }
+.route-stage { scroll-margin-top: calc(var(--route-top) + clamp(170px, 30vh, 300px) + 16px); }
+.route-stage-kicker { margin: 0; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--maple); }
+.route-stage-title { font-size: 1.4rem; font-weight: 700; line-height: 1.2; margin: 2px 0 12px; }
+.route-stage-img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); margin-bottom: 14px; background: var(--muted); }
+
+/* Reveal on scroll: RouteView adds .is-visible once a stage enters the viewport. */
+.route-stage > * { opacity: 0; transform: translateY(24px); transition: opacity 600ms ease, transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.route-stage > :nth-child(2) { transition-delay: 80ms; }
+.route-stage > :nth-child(3) { transition-delay: 160ms; }
+.route-stage > :nth-child(4) { transition-delay: 240ms; }
+.route-stage.is-visible > * { opacity: 1; transform: none; }
+
+@keyframes route-fade-up { from { opacity: 0; transform: translateY(8px); } }
+@media (prefers-reduced-motion: reduce) {
+  .route-stage > *, .route-hero-img, .route-rail-fill, .route-rail-dot { transition: none; }
+  .route-stage > * { opacity: 1; transform: none; }
+  .route-hero-stage { animation: none; }
+}
+
+/* Tips page (blueprint: tips.md). */
+.tips-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.tips-chips button { all: unset; cursor: pointer; flex: none; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 0.9rem; font-weight: 600; color: var(--muted-foreground); transition: background 200ms, color 200ms, border-color 200ms; }
+.tips-chips button[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); }
+.tips-chips button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.tips-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+@media (min-width: 760px) { .tips-list { grid-template-columns: 1fr 1fr; } }
+.tips-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px 6px; animation: route-fade-up 300ms ease both; }
+.tips-card-chip { margin: 0; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--maple); }
+.tips-card-title { font-size: 1.05rem; font-weight: 700; margin: 2px 0 8px; line-height: 1.3; }
+@media (prefers-reduced-motion: reduce) { .tips-card { animation: none; } }

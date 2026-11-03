@@ -1,0 +1,10 @@
+{
+  "_note": "The only tags a route may use (frontmatter `tags: [id, id]`). Order = chip order on the Routes page.",
+  "tags": [
+    { "id": "anime", "label": "Anime sights" },
+    { "id": "shopping", "label": "Shopping" },
+    { "id": "nature", "label": "Nature" },
+    { "id": "temples-history", "label": "Temples & history" },
+    { "id": "food", "label": "Food" }
+  ]
+}

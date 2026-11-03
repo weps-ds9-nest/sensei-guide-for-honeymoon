@@ -46,7 +46,9 @@ _App root: `implementation/susi-ghiso-japan/` (run all npm commands there). Huma
 
 | Content | File(s) | Blueprint |
 |---|---|---|
-| Guides / routes / tools / shop entries | `content/{guides,suggestions,tools,shop}/*.md` (frontmatter + Markdown) | `content-engine.md`, `data-model.md` |
+| Tips (chip-filtered, `/guides`) | `content/guides/<chip>.md` (file = chip, `##` = tip; `_TEMPLATE.md` ignored) | `tips.md` |
+| Tools / shop entries | `content/{tools,shop}/*.md` (frontmatter + Markdown) | `content-engine.md`, `data-model.md` |
+| Routes (stage header, progress rail) | `content/routes/*.md` (`##` = stage, photo line under it; `_TEMPLATE.md` ignored); photos via `npm run photo` | `routes.md` |
 | Trip days and locations | `content/itinerary.json` | `homepage.md`, `data-model.md` |
 | Checklists | `content/checklists.json` (ids must stay stable) | `homepage.md` |
 | Day-trip picker | `content/daytrips/<city>.json` (options + all 3-pick combinations), `content/daytrips/destinations/<slug>.md` (cards; `_TEMPLATE.md` ignored) | `daytrips.md` |
@@ -56,10 +58,14 @@ _App root: `implementation/susi-ghiso-japan/` (run all npm commands there). Huma
 
 - Content engine: `scripts/build-content.mjs` reads `content/`, validates it (errors fail the build, warnings don't) and writes `src/generated/{content,itinerary,checklists,daytrips}.json`.
 - Routing: `src/App.tsx` + `src/lib/router.tsx` (`/`, `/<section>`, `/<section>/<slug>`; sections in `src/lib/content.ts`).
+- Tips page: `src/components/TipsBoard.tsx` + `.tips-*` styles; `splitTips()` in `build-content.mjs`.
+- Route page: `src/components/RouteView.tsx` + `.route-*` styles in `src/styles/content.css`; stages split in `splitStages()` in `build-content.mjs`.
 - Tools page: `src/pages/Sections.tsx` renders `FujiWidget` + `DayTripPicker` when section is `tools`.
 - Feature logic: `src/lib/fuji.ts` (tunable constants at top), `src/lib/rates.ts`, `src/lib/daytrips.ts`, `src/lib/journey.ts`, `src/lib/checks.ts`.
 - Look: `src/styles/theme.css` only. No hex colours, raw radii or font names in components (`design.md`).
 - Privacy: `vercel.json` (noindex headers, no-referrer, CSP allowlist: only Frankfurter + Open-Meteo), `public/robots.txt`. External links use `rel="noopener noreferrer"`. A new external request must be added to the CSP and to `integrations.md`.
+
+**Skills:** `/new-tip` (add tips), `/new-route` (add a route with photos).
 
 **Commands:** `npm run content:check` (validate), `npm run dev`, `npm run build` (rates → content → tsc → vite).
 

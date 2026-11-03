@@ -1,6 +1,6 @@
 # Susi Ghiso Japan
 
-A small private guide for friends on their honeymoon in Japan: a homepage dashboard, guides, route suggestions, tools and shop, built to use very little data on an e-SIM.
+A small private guide for friends on their honeymoon in Japan: a homepage dashboard, guides, suggested routes, tools and shop, built to use very little data on an e-SIM.
 
 ## What This Project Does
 
@@ -21,8 +21,10 @@ Everything a reader sees comes from the files below. Edit them in any text edito
 
 | What you want to change | File | Notes |
 |---|---|---|
-| A guide (tips, essentials) | `content/guides/<name>.md` | Frontmatter: `title` (required), `summary`, `cover`, `order`, `tags`, `city`. File name = URL. |
-| A route suggestion | `content/suggestions/<name>.md` | Same frontmatter. Each `##` heading becomes a numbered stop. |
+| Tips (the Tips page) | `content/guides/<topic>.md` | One file = one filter chip (`title` = chip label, `order` = chip position). Each `##` heading = one tip card. Copy `_TEMPLATE.md` for a new topic. |
+| A route | `content/routes/<name>.md` | Copy `_TEMPLATE.md`. `title` = header title; text before the first `##` = intro; each `##` = a stage (header subtitle + progress bar). Put the stage photo on the line under its heading: `![Alt](/media/routes/x.jpg "Credit")`. |
+| Route tags (Routes page chips) | `content/routes/_tags.json` | The only tags a route may use: `anime`, `shopping`, `nature`, `temples-history`, `food`. Each route needs at least one, e.g. `tags: [shopping, food]`. Add or rename a tag here. |
+| A route photo | `public/media/routes/` | `npm run photo -- "Shibuya crossing at night" routes/shibuya` downloads a free-licence photo from Wikimedia Commons, shrinks it under 400 KB and prints the line to paste. Add `--pick 3` to take another result. Or drop your own JPG there. |
 | Tools / Shop entries | `content/tools/<name>.md`, `content/shop/<name>.md` | Same frontmatter. Empty for now. |
 | Trip days and city per day | `content/itinerary.json` | `days[]`: `date` (YYYY-MM-DD) and `location`. Drives "Today: …" and the before/during/after states on the homepage. |
 | Preflight and flight checklists | `content/checklists.json` | `preflight[]` / `flight[]`: `id` (lowercase-hyphen, keep stable or saved ticks are lost) and `label`. |
@@ -33,7 +35,7 @@ Everything a reader sees comes from the files below. Edit them in any text edito
 | Colours, radius, fonts | `src/styles/theme.css` | The only place for visual values. |
 | Section titles and intros | `src/pages/Sections.tsx` (`TITLES`, `INTROS`) | Code. |
 
-To write a new guide or route with Claude, use the `new-guide` skill (`.claude/skills/new-guide/`).
+To add tips or a route with Claude, use `/new-tip` or `/new-route` (`.claude/skills/`).
 
 ## Project Structure
 
@@ -46,7 +48,7 @@ To write a new guide or route with Claude, use the `new-guide` skill (`.claude/s
 - `src/styles/`: `theme.css` (visual tokens, change the look here), `content.css` (article and route typography)
 - `public/`: `robots.txt`, `sw.js`, manifest, favicon, `media/` for photos
 - `vercel.json`: privacy headers (noindex, no-referrer, CSP) and rewrites
-- `.claude/skills/new-guide/`: skill and templates for writing a new entry
+- `.claude/skills/new-tip/`, `.claude/skills/new-route/`: skills and templates for adding tips and routes
 
 ## Setup
 

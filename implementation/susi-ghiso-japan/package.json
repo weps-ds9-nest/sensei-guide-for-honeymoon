@@ -11,7 +11,8 @@
     "prebuild": "npm run rates && npm run content",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "predev": "npm run rates && npm run content"
+    "predev": "npm run rates && npm run content",
+    "photo": "node scripts/fetch-photo.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

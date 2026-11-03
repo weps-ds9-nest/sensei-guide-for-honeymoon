@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { Link } from "@/lib/router";
-import type { Item, Section } from "@/lib/content";
+import { tagLabel, type Item, type Section } from "@/lib/content";
 
 function hueFor(slug: string): number {
   let hash = 0;
@@ -35,7 +35,7 @@ export function ItemCard({ item, section }: { item: Item; section: Section }) {
           <ul className="mt-3 flex flex-wrap gap-1.5">
             {item.tags.map((tag) => (
               <li key={tag} className="rounded-full bg-muted px-2.5 py-0.5 text-xs text-muted-foreground">
-                {tag}
+                {section === "routes" ? tagLabel(tag) : tag}
               </li>
             ))}
           </ul>

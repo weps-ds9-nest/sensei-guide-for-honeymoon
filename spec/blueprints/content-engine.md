@@ -7,7 +7,7 @@ _Purpose: define how Markdown files become the guides, route pages and other ent
 | Section | Folder | Route | Layout |
 |---|---|---|---|
 | Guides | `content/guides/` | `/guides/:slug` | Standard article |
-| Suggestions | `content/suggestions/` | `/suggestions/:slug` | Route (numbered stops) |
+| Routes | `content/routes/` | `/routes/:slug` | Route stages, see `routes.md` |
 | Tools | `content/tools/` | `/tools/:slug` | Standard article |
 | Shop | `content/shop/` | `/shop/:slug` | Standard article |
 

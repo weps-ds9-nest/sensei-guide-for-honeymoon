@@ -13,7 +13,7 @@ const PUBLIC = path.join(ROOT, "public");
 const GENERATED = path.join(ROOT, "src", "generated");
 const CHECK_ONLY = process.argv.includes("--check");
 
-const SECTIONS = ["guides", "suggestions", "tools", "shop"];
+const SECTIONS = ["guides", "routes", "tools", "shop"];
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const MAX_IMAGE_BYTES = 400 * 1024;
 const errors = [];
@@ -63,10 +63,42 @@ async function checkImage(href, file) {
   if (size > MAX_IMAGE_BYTES) warn(`${file}: ${href} is ${Math.round(size / 1024)} KB (limit 400 KB)`);
 }
 
+// Routes (blueprint: routes.md): text before the first "##" is the intro; each "##" is a stage.
+// An image on its own line right under the heading becomes the stage photo in the header.
+const STAGE_IMAGE = /^\s*!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)\s*$/m;
+function splitStages(body, label) {
+  const [intro, ...parts] = body.split(/^## +/m);
+  if (parts.length === 0) fail(`${label}: a route needs at least one "## Stage" heading`);
+  const stages = parts.map((part) => {
+    const nl = part.indexOf("\n");
+    const title = (nl < 0 ? part : part.slice(0, nl)).trim();
+    let rest = nl < 0 ? "" : part.slice(nl + 1);
+    let image = null;
+    const m = rest.match(STAGE_IMAGE);
+    if (m && rest.slice(0, m.index).trim() === "") {
+      image = { src: m[2], alt: m[1], credit: m[3] ?? "" };
+      if (!m[1]) warn(`${label}: stage "${title}" photo has no alt text`);
+      rest = rest.slice(m.index + m[0].length);
+    } else warn(`${label}: stage "${title}" has no photo (the header keeps the previous one)`);
+    return { title, image, html: marked.parse(rest) };
+  });
+  return { intro: marked.parse(intro), stages };
+}
+
+// Tips (blueprint: tips.md): each guides/<chip>.md file is one chip; each "##" inside is one tip.
+function splitTips(body, label) {
+  const parts = body.split(/^## +/m).slice(1);
+  if (parts.length === 0) warn(`${label}: no "## Tip" headings, so this chip is empty`);
+  return parts.map((part) => {
+    const nl = part.indexOf("\n");
+    return { title: (nl < 0 ? part : part.slice(0, nl)).trim(), html: marked.parse(nl < 0 ? "" : part.slice(nl + 1)) };
+  });
+}
+
 async function buildSection(section) {
   const dir = path.join(CONTENT, section);
   if (!existsSync(dir)) return [];
-  const files = (await readdir(dir)).filter((f) => f.endsWith(".md")).sort();
+  const files = (await readdir(dir)).filter((f) => f.endsWith(".md") && !f.startsWith("_")).sort();
   const seen = new Set();
   const items = [];
   for (const file of files) {
@@ -79,6 +111,7 @@ async function buildSection(section) {
     if (!parsed) continue;
     const { data, body } = parsed;
     if (!data.title) fail(`${label}: "title" is required`);
+    if (data.cover) await checkImage(String(data.cover), label);
     const html = marked.parse(body);
     for (const m of html.matchAll(/<img[^>]+src="([^"]+)"/g)) await checkImage(m[1], label);
     items.push({
@@ -90,6 +123,8 @@ async function buildSection(section) {
       tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
       city: data.city ? String(data.city) : null,
       html,
+      ...(section === "routes" ? splitStages(body, label) : {}),
+      ...(section === "guides" ? { tips: splitTips(body, label) } : {}),
     });
   }
   items.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
@@ -212,6 +247,13 @@ async function buildDaytrips() {
 async function main() {
   const content = {};
   for (const s of SECTIONS) content[s] = await buildSection(s);
+  // Route tags (blueprint: routes.md): only ids from content/routes/_tags.json are allowed.
+  const routeTags = (await readJsonIfExists(path.join(CONTENT, "routes", "_tags.json")))?.tags ?? [];
+  const allowed = new Set(routeTags.map((t) => t.id));
+  for (const r of content.routes) {
+    if (r.tags.length === 0) fail(`routes/${r.slug}.md: needs at least one tag (${[...allowed].join(", ")})`);
+    for (const t of r.tags) if (!allowed.has(t)) fail(`routes/${r.slug}.md: tag "${t}" is not allowed; use: ${[...allowed].join(", ")}`);
+  }
   const itinerary = validateItinerary(await readJsonIfExists(path.join(CONTENT, "itinerary.json")));
   const checklists = validateChecklists(await readJsonIfExists(path.join(CONTENT, "checklists.json")));
   const daytrips = await buildDaytrips();
@@ -228,6 +270,7 @@ async function main() {
   }
   await mkdir(GENERATED, { recursive: true });
   await writeFile(path.join(GENERATED, "content.json"), JSON.stringify(content));
+  await writeFile(path.join(GENERATED, "route-tags.json"), JSON.stringify(routeTags));
   await writeFile(path.join(GENERATED, "itinerary.json"), JSON.stringify(itinerary));
   await writeFile(path.join(GENERATED, "checklists.json"), JSON.stringify(checklists));
   await writeFile(path.join(GENERATED, "daytrips.json"), JSON.stringify(daytrips));

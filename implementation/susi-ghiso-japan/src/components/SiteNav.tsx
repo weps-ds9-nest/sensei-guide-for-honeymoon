@@ -5,9 +5,9 @@ import { Link, useRouter } from "@/lib/router";
 import { cn } from "@/lib/utils";
 
 const PAGES = [
-  { to: "/guides", label: "Guides" },
+  { to: "/guides", label: "Tips" },
   { to: "/tools", label: "Tools" },
-  { to: "/suggestions", label: "Suggestions" },
+  { to: "/routes", label: "Routes" },
   { to: "/shop", label: "Shop" },
 ];
 
