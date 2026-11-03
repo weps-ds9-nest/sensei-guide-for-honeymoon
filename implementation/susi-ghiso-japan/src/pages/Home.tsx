@@ -53,7 +53,7 @@ export function Home() {
         ]}
       />
 
-      {showFuji && <FujiWidget />}
+      {showFuji && <FujiWidget compact />}
     </div>
   );
 }

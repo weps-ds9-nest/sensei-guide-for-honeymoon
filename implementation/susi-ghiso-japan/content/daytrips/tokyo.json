@@ -2,22 +2,107 @@
   "label": "Tokyo",
   "order": 1,
   "options": [
-    { "id": "fuji", "label": "Fuji excursion" },
-    { "id": "nature", "label": "Nature" },
-    { "id": "momiji", "label": "Momiji" },
-    { "id": "history", "label": "History" },
-    { "id": "offbeat", "label": "Off the beaten path" }
+    {
+      "id": "fuji",
+      "label": "Fuji excursion"
+    },
+    {
+      "id": "nature",
+      "label": "Nature"
+    },
+    {
+      "id": "momiji",
+      "label": "Momiji"
+    },
+    {
+      "id": "history",
+      "label": "History"
+    },
+    {
+      "id": "offbeat",
+      "label": "Off the beaten path"
+    }
   ],
   "combinations": [
-    { "pick": ["fuji", "nature", "momiji"], "result": "mt-takao" },
-    { "pick": ["fuji", "history", "momiji"], "result": "fujikawaguchiko" },
-    { "pick": ["history", "nature", "momiji"], "result": "nikko" },
-    { "pick": ["fuji", "nature", "history"], "result": "" },
-    { "pick": ["fuji", "nature", "offbeat"], "result": "" },
-    { "pick": ["fuji", "momiji", "offbeat"], "result": "" },
-    { "pick": ["fuji", "history", "offbeat"], "result": "" },
-    { "pick": ["nature", "momiji", "offbeat"], "result": "" },
-    { "pick": ["nature", "history", "offbeat"], "result": "" },
-    { "pick": ["momiji", "history", "offbeat"], "result": "" }
+    {
+      "pick": [
+        "fuji",
+        "nature",
+        "momiji"
+      ],
+      "result": "hakone"
+    },
+    {
+      "pick": [
+        "fuji",
+        "history",
+        "momiji"
+      ],
+      "result": "fujikawaguchiko"
+    },
+    {
+      "pick": [
+        "history",
+        "nature",
+        "momiji"
+      ],
+      "result": "nikko"
+    },
+    {
+      "pick": [
+        "fuji",
+        "nature",
+        "history"
+      ],
+      "result": "kamakura"
+    },
+    {
+      "pick": [
+        "fuji",
+        "nature",
+        "offbeat"
+      ],
+      "result": "mt-takao"
+    },
+    {
+      "pick": [
+        "fuji",
+        "momiji",
+        "offbeat"
+      ],
+      "result": "mt-takao"
+    },
+    {
+      "pick": [
+        "fuji",
+        "history",
+        "offbeat"
+      ],
+      "result": "ito-peninsula"
+    },
+    {
+      "pick": [
+        "nature",
+        "momiji",
+        "offbeat"
+      ],
+      "result": "mt-mitake"
+    },
+    {
+      "pick": [
+        "nature",
+        "history",
+        "offbeat"
+      ],
+      "result": "karuizawa"
+    },
+    {
+      "pick": [
+        "momiji",
+        "history",
+        "offbeat"
+      ],
+      "result": "matsumoto"
+    }
   ]
 }

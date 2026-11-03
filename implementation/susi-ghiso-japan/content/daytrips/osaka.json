@@ -2,22 +2,107 @@
   "label": "Osaka",
   "order": 2,
   "options": [
-    { "id": "temples", "label": "Temples & shrines" },
-    { "id": "castles", "label": "Castles" },
-    { "id": "momiji", "label": "Momiji" },
-    { "id": "onsen", "label": "Onsen" },
-    { "id": "offbeat", "label": "Off the beaten path" }
+    {
+      "id": "temples",
+      "label": "Temples"
+    },
+    {
+      "id": "history",
+      "label": "Historical Sites"
+    },
+    {
+      "id": "momiji",
+      "label": "Momiji"
+    },
+    {
+      "id": "nature",
+      "label": "Nature"
+    },
+    {
+      "id": "food",
+      "label": "Food"
+    }
   ],
   "combinations": [
-    { "pick": ["temples", "castles", "momiji"], "result": "" },
-    { "pick": ["temples", "castles", "onsen"], "result": "" },
-    { "pick": ["temples", "castles", "offbeat"], "result": "" },
-    { "pick": ["temples", "momiji", "onsen"], "result": "" },
-    { "pick": ["temples", "momiji", "offbeat"], "result": "" },
-    { "pick": ["temples", "onsen", "offbeat"], "result": "" },
-    { "pick": ["castles", "momiji", "onsen"], "result": "" },
-    { "pick": ["castles", "momiji", "offbeat"], "result": "" },
-    { "pick": ["castles", "onsen", "offbeat"], "result": "" },
-    { "pick": ["momiji", "onsen", "offbeat"], "result": "" }
+    {
+      "pick": [
+        "temples",
+        "history",
+        "momiji"
+      ],
+      "result": "kyoto-east"
+    },
+    {
+      "pick": [
+        "temples",
+        "history",
+        "nature"
+      ],
+      "result": "kyoto-west"
+    },
+    {
+      "pick": [
+        "temples",
+        "history",
+        "food"
+      ],
+      "result": "kobe-himeji"
+    },
+    {
+      "pick": [
+        "temples",
+        "momiji",
+        "nature"
+      ],
+      "result": "kyoto-north"
+    },
+    {
+      "pick": [
+        "temples",
+        "momiji",
+        "food"
+      ],
+      "result": "nara"
+    },
+    {
+      "pick": [
+        "temples",
+        "nature",
+        "food"
+      ],
+      "result": "uji"
+    },
+    {
+      "pick": [
+        "history",
+        "momiji",
+        "nature"
+      ],
+      "result": "nara"
+    },
+    {
+      "pick": [
+        "history",
+        "momiji",
+        "food"
+      ],
+      "result": "kobe"
+    },
+    {
+      "pick": [
+        "history",
+        "nature",
+        "food"
+      ],
+      "result": "kyoto-northwest"
+    },
+    {
+      "pick": [
+        "momiji",
+        "nature",
+        "food"
+      ],
+      "result": "koyasan"
+    }
   ]
 }
